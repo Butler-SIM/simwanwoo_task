@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+  app:
+    container_name: api-app
+    restart: always
+    build: ./
+    command: gunicorn config.wsgi --env DJANGO_SETTINGS_MODULE=config.settings --bind 0.0.0.0:8000
+    volumes:
+      - ./:/app
+
+  nginx:
+    container_name: api-nginx
+    restart: always
+    build: ./nginx/local
+    ports:
+      - 1337:80
+    depends_on:
+      - app
